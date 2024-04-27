@@ -1,0 +1,27 @@
+{
+  "name": "js_project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^5.13.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "sequelize": "^6.37.3",
+    "sqlite3": "^5.1.7",
+    "vitest": "^1.5.2"
+  },
+  "devDependencies": {
+    "prisma": "^5.13.0",
+    "sequelize-cli": "^6.6.2"
+  }
+}
