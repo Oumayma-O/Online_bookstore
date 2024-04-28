@@ -1,42 +1,56 @@
-// Import the necessary modules and functions
-import { vitest, expect } from 'vitest';
-const {getAllBooks} = require("../src/controllers/book.controller");
+import { test, expect } from 'vitest';
+import * as bookController from '../src/controllers/book.controller';
 
-// Mock PrismaClient instance
+// Mock the PrismaClient methods
 const prismaMock = {
     book: {
-        findMany: () => Promise.resolve([]),
-        findUnique: () => Promise.resolve(null),
-        create: () => Promise.resolve({}),
-        update: () => Promise.resolve({}),
-        delete: () => Promise.resolve({})
-    }
+        findMany: () => Promise.resolve(seedData), // Mock the findMany method
+    },
 };
 
-// Define the test suite using vitest
-vitest('Book Controller Tests', async (test) => {
-    // Test for getAllBooks function
-    test('Get all books', async () => {
-        const req = {}; // You can customize the request object if needed
-        const res = {
-            status: () => res,
-            json: (data) => {
-                res.data = data; // Store the JSON response in res.data for testing
-                return res;
-            }
-        };
+// Mock the response object
+const resMock = {
+    status: () => resMock,
+    json: () => resMock
+};
 
-        // Replace book controller's prisma instance with the mock
-        getAllBooks.__setPrisma(prismaMock);
+// Seed data for testing
+const seedData = [
+    {
+        title: "The Great Gatsby",
+        author: "F. Scott Fitzgerald",
+        category: "Classic",
+        price: 10.99,
+        quantity: 100
+    },
+    {
+        title: "To Kill a Mockingbird",
+        author: "Harper Lee",
+        category: "Classic",
+        price: 12.99,
+        quantity: 80
+    },
+    {
+        title: "Harry Potter and the Philosopher's Stone",
+        author: "J.K. Rowling",
+        category: "Fantasy",
+        price: 14.99,
+        quantity: 120
+    }
+];
 
-        await getAllBooks(req, res);
+test('Test getAllBooks function', async ({ context }) => {
+    // Ensure context object is initialized
+    context = context || {};
 
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith([]);
-    });
+    // Mock the PrismaClient
+    context.prisma = prismaMock;
 
-    // Similar tests for other controller functions (getBookById, createBook, updateBook, deleteBook)...
+    // Call the getAllBooks function from the controller
+    await bookController.getAllBooks({}, resMock);
+
+    // Assert that the status method was called with 200
+    expect(resMock.status).toHaveBeenCalledWith(200);
+    // Assert that the json method was called with the expected data
+    expect(resMock.json).toHaveBeenCalledWith(seedData);
 });
-
-// Run the defined test suite
-vitest.run();
